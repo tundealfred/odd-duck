@@ -1,63 +1,20 @@
-let imageContainer = document.querySelector("section");
-let image1 = document.querySelector("section img:first-child");
-let image2 = document.querySelector("section img:nth-child(2)");
-let image3 = document.querySelector("section img:nth-child(3)");
+const image1 = document.getElementById("image1");
+const image2 = document.getElementById("image2");
+const image3 = document.getElementById("image3");
 
+//the Constructor
 function Products(name, src) {
   this.name = name;
   this.src = src;
-  this.view = 0;
+  this.views = 0;
   this.clicks = 0;
 }
 
-function getRandomIndex() {
-  return Math.floor(Math.random() * allProducts.length);
-}
+//the click CONTROLLER!!!
+let userClicks = 0;
+let maxClicks = 25;
 
-function showProducts() {
-  let image1Index = getRandomIndex();
-  let image2Index = getRandomIndex();
-  let image3Index = getRandomIndex();
-
-  while (
-    image1Index === image2Index ||
-    image2Index === image3Index ||
-    image1Index === image3Index
-  ) {
-    image2Index = getRandomIndex;
-    image3Index = getRandomIndex;
-  }
-
-  image1.src = allProducts[image1Index].src;
-  image2.src = allProducts[image2Index].src;
-  image3.src = allProducts[image3Index].src;
-
-  image1.alt = allProducts[image1Index].name;
-  image2.alt = allProducts[image2Index].name;
-  image3.alt = allProducts[image3Index].name;
-
-  allProducts[image1Index].view++;
-  allProducts[image2Index].view++;
-  allProducts[image3Index].view++;
-}
-
-function handleProductClick(event) {
-  let clickedProduct = event.target.alt;
-
-  if (event.target === imageContainer) {
-    alert("Please Click on an image");
-  } else {
-    showProducts();
-  }
-
-  for (let i = 0; i < allProducts.length; i++) {
-    if (clickedProduct === allProducts[i].name) {
-      allProducts[i].clicks++;
-      break;
-    }
-  }
-}
-
+//Array of Products
 const allProducts = [
   new Products("Bag", "./img/bag.jpg"),
   new Products("Banana", "./img/banana.jpg"),
@@ -72,13 +29,115 @@ const allProducts = [
   new Products("Pet-sweep", "./img/pet-sweep.jpg"),
   new Products("Scissors", "./img/scissors.jpg"),
   new Products("Sharks", "./img/shark.jpg"),
-  new Products("Sweep", "./img/sweep.png"),
   new Products("Tauntaun", "./img/tauntaun.jpg"),
   new Products("Unicorn", "./img/unicorn.jpg"),
   new Products("Water-can", "./img/water-can.jpg"),
   new Products("Wine-glass", "./img/wine-glass.jpg"),
 ];
 
-imageContainer.addEventListener("click", handleProductClick);
+//Random Picker!!!
+function getRandomIndex() {
+  return Math.floor(Math.random() * allProducts.length);
+}
+
+//Display 3 Images
+function showProducts() {
+  let image1Idx = getRandomIndex();
+  let image2Idx = getRandomIndex();
+  let image3Idx = getRandomIndex();
+
+  while (
+    image1Idx === image2Idx ||
+    image2Idx === image3Idx ||
+    image1Idx === image3Idx
+  ) {
+    image2Idx = getRandomIndex();
+    image3Idx = getRandomIndex();
+  }
+
+  image1.src = allProducts[image1Idx].src;
+  image2.src = allProducts[image2Idx].src;
+  image3.src = allProducts[image3Idx].src;
+
+  image1.alt = allProducts[image1Idx].name;
+  image2.alt = allProducts[image2Idx].name;
+  image3.alt = allProducts[image3Idx].name;
+
+  allProducts[image1Idx].views++;
+  allProducts[image2Idx].views++;
+  allProducts[image3Idx].views++;
+}
+
+function handleProductClick(event) {
+  if (userClicks === maxClicks) {
+    alert("You have run out of votes");
+    showChart();
+    return; // end the function here and don't run the rest
+  }
+  userClicks++;
+
+  let clickedProduct = event.target.alt;
+
+  for (let i = 0; i < allProducts.length; i++) {
+    if (clickedProduct === allProducts[i].name) {
+      allProducts[i].clicks++;
+      break;
+    }
+  }
+  showProducts();
+}
+
+image1.addEventListener("click", handleProductClick);
+image2.addEventListener("click", handleProductClick);
+image3.addEventListener("click", handleProductClick);
+
+// //button
+function showResults() {
+  const results = document.getElementById("results");
+
+  for (let i = 0; i < allProducts.length; i++) {
+    const li = document.createElement("li");
+    const product = allProducts[i];
+    li.textContent = `${product.name} was viewed ${product.views} times, and clicked ${product.clicks} times`;
+    results.appendChild(li);
+  }
+}
+
+// const displayResult = document.getElementById("viewResult");
+// displayResult.addEventListener("click", showResults);
 
 showProducts();
+
+function showChart() {
+  const ctx = document.getElementById("myChart").getContext("2d");
+
+  const productNames = allProducts.map((product) => product.name);
+  const productViews = allProducts.map((product) => product.views);
+  const productClicks = allProducts.map((product) => product.clicks);
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: productNames,
+      datasets: [
+        {
+          label: "Views",
+          data: productViews,
+          borderWidth: 1,
+        },
+        {
+          label: "Clicks",
+          data: productClicks,
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
