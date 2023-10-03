@@ -32,9 +32,9 @@ function showProducts() {
   image2.src = allProducts[image2Index].src;
   image3.src = allProducts[image3Index].src;
 
-  image1.alt = allProducts[image1Index].alt;
-  image2.alt = allProducts[image2Index].alt;
-  image3.alt = allProducts[image3Index].alt;
+  image1.alt = allProducts[image1Index].name;
+  image2.alt = allProducts[image2Index].name;
+  image3.alt = allProducts[image3Index].name;
 
   allProducts[image1Index].view++;
   allProducts[image2Index].view++;
