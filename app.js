@@ -2,38 +2,51 @@ const image1 = document.getElementById("image1");
 const image2 = document.getElementById("image2");
 const image3 = document.getElementById("image3");
 
-//the Constructor
-function Products(name, src) {
-  this.name = name;
-  this.src = src;
-  this.views = 0;
-  this.clicks = 0;
-}
-
 //the click CONTROLLER!!!
 let userClicks = 0;
 let maxClicks = 25;
 
+const allProducts = [];
+
+//the Constructor
+function Products(name, src, views, clicks) {
+  this.name = name;
+  this.src = src;
+  this.views = views;
+  this.clicks = clicks;
+
+  allProducts.push(this);
+}
+
 //Array of Products
-const allProducts = [
-  new Products("Bag", "./img/bag.jpg"),
-  new Products("Banana", "./img/banana.jpg"),
-  new Products("Bathroom", "./img/bathroom.jpg"),
-  new Products("Boots", "./img/boots.jpg"),
-  new Products("Bubblegum", "./img/bubblegum.jpg"),
-  new Products("Chair", "./img/bubblegum.jpg"),
-  new Products("Cthulhu", "./img/cthulhu.jpg"),
-  new Products("Dog-duck", "./img/dog-duck.jpg"),
-  new Products("Dragon", "./img/dog-duck.jpg"),
-  new Products("Pen", "./img/pen.jpg"),
-  new Products("Pet-sweep", "./img/pet-sweep.jpg"),
-  new Products("Scissors", "./img/scissors.jpg"),
-  new Products("Sharks", "./img/shark.jpg"),
-  new Products("Tauntaun", "./img/tauntaun.jpg"),
-  new Products("Unicorn", "./img/unicorn.jpg"),
-  new Products("Water-can", "./img/water-can.jpg"),
-  new Products("Wine-glass", "./img/wine-glass.jpg"),
-];
+if (localStorage.getItem("allProducts") === null) {
+  new Products("Bag", "./img/bag.jpg", 0, 0);
+  new Products("Banana", "./img/banana.jpg", 0, 0);
+  new Products("Bathroom", "./img/bathroom.jpg", 0, 0);
+  new Products("Boots", "./img/boots.jpg", 0, 0);
+  new Products("Bubblegum", "./img/bubblegum.jpg", 0, 0);
+  new Products("Chair", "./img/bubblegum.jpg", 0, 0);
+  new Products("Cthulhu", "./img/cthulhu.jpg", 0, 0);
+  new Products("Dog-duck", "./img/dog-duck.jpg", 0, 0);
+  new Products("Dragon", "./img/dog-duck.jpg", 0, 0);
+  new Products("Pen", "./img/pen.jpg", 0, 0);
+  new Products("Pet-sweep", "./img/pet-sweep.jpg", 0, 0);
+  new Products("Scissors", "./img/scissors.jpg", 0, 0);
+  new Products("Sharks", "./img/shark.jpg", 0, 0);
+  new Products("Tauntaun", "./img/tauntaun.jpg", 0, 0);
+  new Products("Unicorn", "./img/unicorn.jpg", 0, 0);
+  new Products("Water-can", "./img/water-can.jpg", 0, 0);
+  new Products("Wine-glass", "./img/wine-glass.jpg", 0, 0);
+} else {
+  const allProductsLS = JSON.parse(localStorage.getItem("allProducts"));
+  for (let i = 0; i < allProductsLS.length; i++) {
+    new Products(
+      allProductsLS[i].name,
+      allProductsLS.views,
+      allProductsLS.clicks
+    );
+  }
+}
 
 //Random Picker!!!
 function getRandomIndex() {
@@ -72,6 +85,7 @@ function handleProductClick(event) {
   if (userClicks === maxClicks) {
     alert("You have run out of votes");
     showChart();
+    localStorage.setItem("allProducts", JSON.stringify(allProducts));
     return; // end the function here and don't run the rest
   }
   userClicks++;
@@ -90,21 +104,6 @@ function handleProductClick(event) {
 image1.addEventListener("click", handleProductClick);
 image2.addEventListener("click", handleProductClick);
 image3.addEventListener("click", handleProductClick);
-
-// //button
-function showResults() {
-  const results = document.getElementById("results");
-
-  for (let i = 0; i < allProducts.length; i++) {
-    const li = document.createElement("li");
-    const product = allProducts[i];
-    li.textContent = `${product.name} was viewed ${product.views} times, and clicked ${product.clicks} times`;
-    results.appendChild(li);
-  }
-}
-
-// const displayResult = document.getElementById("viewResult");
-// displayResult.addEventListener("click", showResults);
 
 showProducts();
 
@@ -141,3 +140,18 @@ function showChart() {
     },
   });
 }
+
+// //button
+// function showResults() {
+//   const results = document.getElementById("results");
+
+//   for (let i = 0; i < allProducts.length; i++) {
+//     const li = document.createElement("li");
+//     const product = allProducts[i];
+//     li.textContent = `${product.name} was viewed ${product.views} times, and clicked ${product.clicks} times`;
+//     results.appendChild(li);
+//   }
+// }
+
+// const displayResult = document.getElementById("viewResult");
+// displayResult.addEventListener("click", showResults);
