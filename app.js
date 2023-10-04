@@ -43,9 +43,9 @@ if (localStorage.getItem("allProducts") === null) {
   for (let i = 0; i < allProductsLS.length; i++) {
     new Products(
       allProductsLS[i].name,
-      allProductsLS.src,
-      allProductsLS.views,
-      allProductsLS.clicks
+      allProductsLS[i].src,
+      allProductsLS[i].views,
+      allProductsLS[i].clicks
     );
   }
 }
