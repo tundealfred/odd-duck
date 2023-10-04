@@ -11,7 +11,8 @@ const allProducts = [];
 //the Constructor
 function Products(name, src, views, clicks) {
   this.name = name;
-  this.src = src;
+  // this.src = src;
+  this.src = `./img/${name}.jpg`;
   this.views = views;
   this.clicks = clicks;
 
@@ -20,28 +21,29 @@ function Products(name, src, views, clicks) {
 
 //Array of Products
 if (localStorage.getItem("allProducts") === null) {
-  new Products("Bag", "./img/bag.jpg", 0, 0);
-  new Products("Banana", "./img/banana.jpg", 0, 0);
-  new Products("Bathroom", "./img/bathroom.jpg", 0, 0);
-  new Products("Boots", "./img/boots.jpg", 0, 0);
-  new Products("Bubblegum", "./img/bubblegum.jpg", 0, 0);
-  new Products("Chair", "./img/bubblegum.jpg", 0, 0);
-  new Products("Cthulhu", "./img/cthulhu.jpg", 0, 0);
-  new Products("Dog-duck", "./img/dog-duck.jpg", 0, 0);
-  new Products("Dragon", "./img/dog-duck.jpg", 0, 0);
-  new Products("Pen", "./img/pen.jpg", 0, 0);
-  new Products("Pet-sweep", "./img/pet-sweep.jpg", 0, 0);
-  new Products("Scissors", "./img/scissors.jpg", 0, 0);
-  new Products("Sharks", "./img/shark.jpg", 0, 0);
-  new Products("Tauntaun", "./img/tauntaun.jpg", 0, 0);
-  new Products("Unicorn", "./img/unicorn.jpg", 0, 0);
-  new Products("Water-can", "./img/water-can.jpg", 0, 0);
-  new Products("Wine-glass", "./img/wine-glass.jpg", 0, 0);
+  new Products("Bag", 0, 0);
+  new Products("Banana", 0, 0);
+  new Products("Bathroom", 0, 0);
+  new Products("Boots", 0, 0);
+  new Products("Bubblegum", 0, 0);
+  new Products("Chair", 0, 0);
+  new Products("Cthulhu", 0, 0);
+  new Products("Dog-duck", 0, 0);
+  new Products("Dragon", 0, 0);
+  new Products("Pen", 0, 0);
+  new Products("Pet-sweep", 0, 0);
+  new Products("Scissors", 0, 0);
+  new Products("Sharks", 0, 0);
+  new Products("Tauntaun", 0, 0);
+  new Products("Unicorn", 0, 0);
+  new Products("Water-can", 0, 0);
+  new Products("Wine-glass", 0, 0);
 } else {
   const allProductsLS = JSON.parse(localStorage.getItem("allProducts"));
   for (let i = 0; i < allProductsLS.length; i++) {
     new Products(
       allProductsLS[i].name,
+      allProductsLS.src,
       allProductsLS.views,
       allProductsLS.clicks
     );
@@ -85,6 +87,7 @@ function handleProductClick(event) {
   if (userClicks === maxClicks) {
     alert("You have run out of votes");
     showChart();
+
     localStorage.setItem("allProducts", JSON.stringify(allProducts));
     return; // end the function here and don't run the rest
   }
@@ -105,10 +108,8 @@ image1.addEventListener("click", handleProductClick);
 image2.addEventListener("click", handleProductClick);
 image3.addEventListener("click", handleProductClick);
 
-showProducts();
-
 function showChart() {
-  const ctx = document.getElementById("myChart").getContext("2d");
+  const ctx = document.getElementById("myChart");
 
   const productNames = allProducts.map((product) => product.name);
   const productViews = allProducts.map((product) => product.views);
@@ -140,6 +141,8 @@ function showChart() {
     },
   });
 }
+
+showProducts();
 
 // //button
 // function showResults() {
