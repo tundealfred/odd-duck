@@ -21,8 +21,8 @@ function Products(name, src, views, clicks) {
 
 //Array of Products
 if (localStorage.getItem("allProducts") === null) {
-  new Products("Bag", 0, 0);
-  new Products("Banana", 0, 0);
+  new Products("bag", 0, 0);
+  new Products("banana", 0, 0);
   new Products("Bathroom", 0, 0);
   new Products("Boots", 0, 0);
   new Products("Bubblegum", 0, 0);
